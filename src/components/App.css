@@ -1,0 +1,193 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.app {
+  background-color: #719eca;
+  min-height: 100vh;
+}
+
+.todo-container {
+  width: 50%;
+  min-height: 60vh;
+  margin: 0 auto;
+  background-color: white;
+  box-shadow: 0 10px 20px #2c3e50;
+}
+#app-heading {
+  color: white;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 400;
+  letter-spacing: 4px;
+  padding-top: 40px;
+  margin: 0;
+  background: linear-gradient(to right, #bdc3c7, #2c3e50);
+}
+.input-div {
+  border-bottom: 3px solid rgb(200, 200, 200);
+  display: inline-block;
+  width: 100%;
+  height: 80px;
+  padding: 0% 4%;
+  font-family: sans-serif;
+  color: grey;
+}
+
+input[type="text"] {
+  width: 90%;
+  border: none;
+  margin-bottom: 20px;
+  margin-top: 4px;
+  font-size: 1.2rem;
+}
+
+input {
+  outline: none;
+}
+
+::placeholder {
+  opacity: 0.4;
+}
+label p {
+  margin: 0;
+  margin-top: 10px;
+  color: grey;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.label50 {
+  display: inline-block;
+  width: 46%;
+  line-height: 25px;
+  height: 100%;
+}
+
+label[for="due_date"] {
+  border-left: 3px solid rgb(200, 200, 200);
+  padding-left: 6%;
+}
+
+select {
+  outline: none;
+  cursor: pointer;
+  border: none;
+  padding-right: 17%;
+  font-size: 1rem;
+}
+
+input[type="date"] {
+  border: none;
+  font-family: sans-serif;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.btn-div {
+  width: 50%;
+  margin: 5% auto;
+  text-align: center;
+}
+
+.btn-div button {
+  border: none;
+  margin: 2px auto;
+  padding: 15px 10px;
+  width: 30%;
+  min-width: 150px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-div button:hover {
+  box-shadow: 0 2px 4px black;
+}
+
+.btn-div i {
+  margin-right: 8px;
+}
+
+#add-btn {
+  background-color: #ff0000d9;
+}
+
+/* List */
+ol {
+  width: 80%;
+  margin: auto;
+  padding-bottom: 10%;
+}
+
+li {
+  list-style: none;
+  width: 100%;
+  /* margin-left: -10%; */
+  border-top: 0.5px solid rgb(200, 200, 200);
+  padding: 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* cursor: pointer; */
+}
+li:hover {
+  background-color: #00000008;
+}
+
+li > i {
+  font-size: 1.5rem;
+  transition: all 0.2s;
+}
+li > i:hover {
+  color: #ff0000d9;
+}
+
+.task-list {
+  width: 60%;
+}
+
+.task-text {
+  margin: 0;
+  margin-bottom: 4px;
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  color: rgb(83, 83, 83);
+  letter-spacing: 0.5px;
+}
+
+.task-date {
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  color: grey;
+}
+
+/* for category button */
+li > button {
+  width: 21%;
+  min-width: 70px;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  padding: 10px 0;
+  border: none;
+  border-radius: 5px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.work {
+  background-color: rgb(219, 181, 255);
+}
+.personal {
+  background-color: rgb(117, 162, 163);
+}
+.cleaning {
+  background-color: coral;
+}
+.school {
+  background-color: rgb(255, 126, 152);
+}
