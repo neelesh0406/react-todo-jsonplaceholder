@@ -2,17 +2,24 @@ import React from 'react'
 import './TodoList.css';
 
 export default function TodoList(props) {
-    const { item, id, deleteItem } = props;
+    const { item, id, deleteItem, handleEdit } = props;
+
     return (
-        <li >
+        <li>
             <i className="fas fa-times-circle" onClick={() => deleteItem(id)}></i>
             <div className="task-list">
-                <p className="task-text">{item.description}</p>
-                <p className="task-date"><i className="far fa-calendar-alt">&nbsp;</i>
-                    {item.deadline.length > 0 ? item.deadline : 'No Deadline'}
+                <p className={item.completed ? 'task-text strike-through' : 'task-text'}>
+                    {item.title}
+                </p>
+                <p className="task-user"><i className="far fa-calendar-alt">&nbsp;</i>
+                    User: {item.userId}
                 </p>
             </div>
-            {<button className={item.category.length > 0 ? item.category : 'other'}>{item.category.length > 0 ? item.category : 'other'}</button>}
-        </li>
+            {item.completed ?
+                <button onClick={() => handleEdit(item.id, true, id)} >Not Done</button>
+                :
+                <button onClick={() => handleEdit(item.id, false, id)} >Done</button>
+            }
+        </li >
     )
 }

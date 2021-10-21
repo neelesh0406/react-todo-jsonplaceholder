@@ -1,47 +1,112 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import TodoList from './TodoList';
 
 function App() {
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [deadline, setDeadline] = useState('');
-  const [taskList, setTaskList] = useState([]); //[{description: '',category: '', deadline: ''}]
+  const [userId, setUserId] = useState('');
+  const [taskList, setTaskList] = useState([]);
+
+  useEffect(() => {
+    const url = "https://jsonplaceholder.typicode.com/todos";
+
+    fetch(url)
+      .then(response => response.json())
+      .then(data => {
+        setTaskList(data);
+      })
+  }, []);
 
   //onChange handlers
   const handleTextChange = (e) => {
     setDescription(e.target.value);
   }
-  const handleDateChange = (e) => {
-    const myDate = new Date(e.target.value);
-
-    setDeadline(myDate.toDateString());
-  }
-  const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
+  const handleUserChange = (e) => {
+    setUserId(e.target.value);
   }
 
   //this function is sent as props to the TodoList component
   const deleteItem = (id) => {
-    const newArr = taskList.filter((items, index) => {
-      return index !== id
+    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+      method: 'DELETE',
     })
-    //return all the elements in a new array except the selected one
-    setTaskList(newArr);
+      .then(response => response.json())
+      .then(data => {
+        const newArr = taskList.filter((item, index) => {
+          return index !== id
+        });
+        setTaskList(newArr);
+      })
+
   }
 
+
+
   const handleAddTask = (e) => {
-    //Add only if the description is entered
-    if (description.length > 0) {
-      setTaskList([...taskList, {
-        description: description,
-        category: category,
-        deadline: deadline
-      }]);
-      //Empty the input box after adding
-      setDescription('');
-      setCategory('');
-      setDeadline('');
+
+    const url = "https://jsonplaceholder.typicode.com/todos";
+
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({
+        userId: userId,
+        title: description,
+        completed: true,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setTaskList([{
+          id: data.id,
+          userId: data.userId,
+          title: data.title,
+          completed: false,
+        }, ...taskList])
+      })
+
+    //Empty the input box after adding
+    setDescription('');
+    setUserId('');
+  }
+
+  // Edits the value of 'Completed' status only using PUT request
+  const handleEdit = (id, isCompleted, index) => {
+    //index is used for the tasks that are added by us because all those have the same ids (201)
+
+    //201 is the id of tasks added by us which cannot be modified on server
+    if (id !== 201) {
+      fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          completed: !isCompleted,
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          //create a new array with the updated details of an item with id as 'id' & use setState
+          const newArr = taskList.filter((item) => {
+            if (item.id === id) {
+              item.completed = data.completed;
+            }
+            return item;
+          })
+          setTaskList(newArr);
+        });
+    }
+    else {
+      const newArr = taskList.filter((item, i) => {
+        if (i === index) {
+          item.completed = !isCompleted;
+        }
+        return item;
+      })
+      setTaskList(newArr);
     }
   }
 
@@ -55,39 +120,21 @@ function App() {
             <input type="text" name="description" id="description" placeholder="What do you need to do ?" value={description} onChange={handleTextChange} />
           </label>
         </div>
+
         <div className="input-div">
-          <label htmlFor="category" className="label50">
-            <p>CATEGORY</p>
-            <select name="category" id="category" value={category} onChange={handleCategoryChange}>
-              <option value="" hidden>Choose a category</option>
-              <option value="personal">Personal</option>
-              <option value="work">Work</option>
-              <option value="school">School</option>
-              <option value="cleaning">Cleaning</option>
-              <option value="other">Other</option>
-            </select>
-          </label>
-          <label htmlFor="due_date" className="label50">
-            <p>DUE DATE</p>
-            <input type="date" name="due_date" id="due_date" value={deadline} onChange={handleDateChange} />
+          <label htmlFor="userID">
+            <p>User Id</p>
+            <input type="number" name="userID" id="userID" placeholder="Enter User Id" value={userId} onChange={handleUserChange} />
           </label>
         </div>
+
         <div className="btn-div">
           <button id="add-btn" onClick={handleAddTask}><i className="fas fa-plus"></i>ADD TASKS</button>
         </div>
 
         <ol>
-          {/* <li>
-            <i className="fas fa-times-circle"></i>
-            <div className="task-list">
-              <p className="task-text">buy mango</p>
-              <p className="task-date"><i className="far fa-calendar-alt">&nbsp;</i>
-                No Deadline
-              </p>
-            </div>
-          </li> */}
           {taskList.map((item, index) => {
-            return <TodoList item={item} id={index} deleteItem={deleteItem} key={index} />
+            return <TodoList item={item} id={index} deleteItem={deleteItem} handleEdit={handleEdit} key={index} />
           })}
 
         </ol>
