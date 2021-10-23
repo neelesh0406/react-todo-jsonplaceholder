@@ -1,19 +1,23 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import TodoList from './TodoList';
+import LoadingBar from 'react-top-loading-bar';
 
 function App() {
   const [description, setDescription] = useState('');
   const [userId, setUserId] = useState('');
   const [taskList, setTaskList] = useState([]);
+  const [progress, setProgress] = useState(0); //for top loader bar
 
   useEffect(() => {
+    setProgress(30);
     const url = "https://jsonplaceholder.typicode.com/todos";
 
     fetch(url)
       .then(response => response.json())
       .then(data => {
         setTaskList(data);
+        setProgress(100);
       })
   }, []);
 
@@ -27,6 +31,8 @@ function App() {
 
   //this function is sent as props to the TodoList component
   const deleteItem = (id) => {
+    setProgress(30);
+
     fetch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
       method: 'DELETE',
     })
@@ -36,14 +42,13 @@ function App() {
           return index !== id
         });
         setTaskList(newArr);
+        setProgress(100);
       })
 
   }
 
-
-
   const handleAddTask = (e) => {
-
+    setProgress(30);
     const url = "https://jsonplaceholder.typicode.com/todos";
 
     fetch(url, {
@@ -65,6 +70,8 @@ function App() {
           title: data.title,
           completed: false,
         }, ...taskList])
+
+        setProgress(100);
       })
 
     //Empty the input box after adding
@@ -74,6 +81,7 @@ function App() {
 
   // Edits the value of 'Completed' status only using PUT request
   const handleEdit = (id, isCompleted, index) => {
+    setProgress(30);
     //index is used for the tasks that are added by us because all those have the same ids (201)
 
     //201 is the id of tasks added by us which cannot be modified on server
@@ -97,6 +105,7 @@ function App() {
             return item;
           })
           setTaskList(newArr);
+          setProgress(100);
         });
     }
     else {
@@ -107,11 +116,18 @@ function App() {
         return item;
       })
       setTaskList(newArr);
+      setProgress(100);
     }
   }
 
   return (
     <div className="app">
+      <LoadingBar
+        color='red'
+        progress={progress}
+        onLoaderFinished={() => setProgress(0)}
+        height='3px'
+      />
       <div className="todo-container">
         <h1 id="app-heading">ToDo APP</h1>
         <div className="input-div">

@@ -1,3 +1,8 @@
+# Todo list app fetching data from jsonholder API
+
+The requests return fake data and nothing is updated on the server.
+GET, POST, PATCH, DELETE request methods are used in this project.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
